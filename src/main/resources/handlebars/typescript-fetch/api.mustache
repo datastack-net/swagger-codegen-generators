@@ -283,6 +283,8 @@ export const {{classname}}Fp = function(configuration?: Configuration) {
     }
 };
 
+{{! disable generation of factories. The setting 'withFactories' doesn't actually exist.}}
+{{#withFactories}}
 /**
  * {{classname}} - factory interface{{#description}}
  * {{&description}}{{/description}}
@@ -308,6 +310,7 @@ export const {{classname}}Factory = function (configuration?: Configuration, fet
     {{/operation}}
     };
 };
+{{/withFactories}}
 
 {{#withInterfaces}}
 /**
