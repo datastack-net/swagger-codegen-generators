@@ -5,6 +5,16 @@
 import * as url from "url";
 import * as isomorphicFetch from "isomorphic-fetch";
 import { Configuration } from "./configuration";
+import { ApiResponse } from "@/shared/api";
+
+// Import models generated from Protobuf
+{{#models}}
+{{#model}}
+{{#vendorExtensions.x-datastack-protobuf-file}}
+import { {{classname}} } from "@/lib/tsproto/{{{vendorExtensions.x-datastack-protobuf-file}}}"
+{{/vendorExtensions.x-datastack-protobuf-file}}
+{{/model}}
+{{/models}}
 
 const BASE_PATH = "{{{basePath}}}".replace(/\/+$/, "");
 
@@ -67,9 +77,6 @@ export class RequiredError extends Error {
     }
 }
 
-{{#models}}
-{{#model}}{{#isEnum}}{{>modelEnum}}{{/isEnum}}{{^isEnum}}{{#isObject}}{{>modelGeneric}}{{/isObject}}{{^isObject}}{{>modelAlias}}{{/isObject}}{{/isEnum}}{{/model}}
-{{/models}}
 {{#apiInfo}}{{#apis}}{{#operations}}
 /**
  * {{classname}} - fetch parameter creator{{#description}}
@@ -260,7 +267,7 @@ export const {{classname}}Fp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        {{nickname}}({{#allParams}}{{paramName}}{{^required}}?{{/required}}: {{{dataType}}}, {{/allParams}}options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<{{#returnType}}{{{returnType}}}{{/returnType}}{{^returnType}}Response{{/returnType}}> {
+        {{nickname}}({{#allParams}}{{paramName}}{{^required}}?{{/required}}: {{{dataType}}}, {{/allParams}}options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<{{#vendorExtensions.x-datastack-typescript-response}}{{{vendorExtensions.x-datastack-typescript-response}}}{{/vendorExtensions.x-datastack-typescript-response}}{{^vendorExtensions.x-datastack-typescript-response}}{{#returnType}}{{{returnType}}}{{/returnType}}{{^returnType}}Response{{/returnType}}{{/vendorExtensions.x-datastack-typescript-response}}> {
             const localVarFetchArgs = {{classname}}FetchParamCreator(configuration).{{nickname}}({{#allParams}}{{paramName}}, {{/allParams}}options);
             return (fetch: FetchAPI = isomorphicFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
