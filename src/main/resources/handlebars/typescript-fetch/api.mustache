@@ -168,6 +168,11 @@ export const {{classname}}FetchParamCreator = function (configuration?: Configur
             {{/isListContainer}}
             {{^isListContainer}}
             if ({{paramName}} !== undefined) {
+                {{#vendorExtensions.x-is-protobuf}}
+                {{! datastack adaptation: json-encode query parameters }}
+                localVarQueryParameter['{{baseName}}'] = JSON.stringify({{dataType}}.toJSON({{paramName}}));
+                {{/vendorExtensions.x-is-protobuf}}
+                {{^vendorExtensions.x-is-protobuf}}
                 {{#isDateTime}}
                 localVarQueryParameter['{{baseName}}'] = ({{paramName}} as any).toISOString();
                 {{/isDateTime}}
@@ -179,6 +184,7 @@ export const {{classname}}FetchParamCreator = function (configuration?: Configur
                 localVarQueryParameter['{{baseName}}'] = {{paramName}};
                 {{/isDate}}
                 {{/isDateTime}}
+                {{/vendorExtensions.x-is-protobuf}}
             }
             {{/isListContainer}}
 
