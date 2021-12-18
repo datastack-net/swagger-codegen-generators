@@ -13,7 +13,12 @@ import { ApiResponse } from "@/shared/apiResponse";
 {{#models}}
 {{#model}}
 {{#vendorExtensions.x-datastack-protobuf-file}}
-import { {{classname}} } from "@/lib/tsproto/{{{vendorExtensions.x-datastack-protobuf-file}}}"
+{{!--
+If api specifies an explicit protobuf name, import that from the file. Used to fix nested (contained) types.
+--}}{{#vendorExtensions.x-datastack-protobuf-name}}import { {{vendorExtensions.x-datastack-protobuf-name}} } {{/vendorExtensions.x-datastack-protobuf-name}}{{!--
+Otherwise, just import the normal class name as provided by swagger.
+--}}{{^vendorExtensions.x-datastack-protobuf-name}}import { {{classname}} } {{/vendorExtensions.x-datastack-protobuf-name}}{{!--
+--}}from "@/lib/tsproto/{{{vendorExtensions.x-datastack-protobuf-file}}}"
 {{/vendorExtensions.x-datastack-protobuf-file}}
 {{/model}}
 {{/models}}
