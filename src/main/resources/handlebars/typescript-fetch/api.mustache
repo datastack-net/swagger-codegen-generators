@@ -7,7 +7,8 @@
 import * as url from "url";
 import * as isomorphicFetch from "isomorphic-fetch";
 import { Configuration } from "./configuration";
-import { ApiResponse } from "@/shared/apiResponse";
+import { ApiResponse } from "@/shared/api/response";
+import { ApiRequestOptions } from "@/shared/api/request";
 
 // Import models generated from Protobuf
 {{#models}}
@@ -104,7 +105,7 @@ export const {{classname}}FetchParamCreator = function (configuration?: Configur
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        {{nickname}}({{#allParams}}{{paramName}}{{^required}}?{{/required}}: {{{dataType}}}, {{/allParams}}options: any = {}): FetchArgs {
+        {{nickname}}({{#allParams}}{{paramName}}{{^required}}?{{/required}}: {{{dataType}}}, {{/allParams}}options: ApiRequestOptions = ApiRequestOptions): FetchArgs {
     {{#allParams}}
     {{#required}}
             // verify required parameter '{{paramName}}' is not null or undefined
@@ -274,7 +275,7 @@ export const {{classname}}Fp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        {{nickname}}({{#allParams}}{{paramName}}{{^required}}?{{/required}}: {{{dataType}}}, {{/allParams}}options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<{{#vendorExtensions.x-datastack-typescript-response}}{{{vendorExtensions.x-datastack-typescript-response}}}{{/vendorExtensions.x-datastack-typescript-response}}{{^vendorExtensions.x-datastack-typescript-response}}{{#returnType}}{{{returnType}}}{{/returnType}}{{^returnType}}Response{{/returnType}}{{/vendorExtensions.x-datastack-typescript-response}}> {
+        {{nickname}}({{#allParams}}{{paramName}}{{^required}}?{{/required}}: {{{dataType}}}, {{/allParams}}options?: ApiRequestOptions): (fetch?: FetchAPI, basePath?: string) => Promise<{{#vendorExtensions.x-datastack-typescript-response}}{{{vendorExtensions.x-datastack-typescript-response}}}{{/vendorExtensions.x-datastack-typescript-response}}{{^vendorExtensions.x-datastack-typescript-response}}{{#returnType}}{{{returnType}}}{{/returnType}}{{^returnType}}Response{{/returnType}}{{/vendorExtensions.x-datastack-typescript-response}}> {
             const localVarFetchArgs = {{classname}}FetchParamCreator(configuration).{{nickname}}({{#allParams}}{{paramName}}, {{/allParams}}options);
             return (fetch: FetchAPI = isomorphicFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
@@ -317,7 +318,7 @@ export const {{classname}}Factory = function (configuration?: Configuration, fet
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        {{nickname}}({{#allParams}}{{paramName}}{{^required}}?{{/required}}: {{{dataType}}}, {{/allParams}}options?: any) {
+        {{nickname}}({{#allParams}}{{paramName}}{{^required}}?{{/required}}: {{{dataType}}}, {{/allParams}}options?: ApiRequestOptions) {
             return {{classname}}Fp(configuration).{{nickname}}({{#allParams}}{{paramName}}, {{/allParams}}options)(fetch, basePath);
         },
     {{/operation}}
@@ -346,7 +347,7 @@ export interface {{classname}}Interface {
      * @throws {RequiredError}
      * @memberof {{classname}}Interface
      */
-    {{nickname}}({{#allParams}}{{paramName}}{{^required}}?{{/required}}: {{{dataType}}}, {{/allParams}}options?: any): Promise<{{#returnType}}{{{returnType}}}{{/returnType}}{{^returnType}}{}{{/returnType}}>;
+    {{nickname}}({{#allParams}}{{paramName}}{{^required}}?{{/required}}: {{{dataType}}}, {{/allParams}}options?: ApiRequestOptions): Promise<{{#returnType}}{{{returnType}}}{{/returnType}}{{^returnType}}{}{{/returnType}}>;
 
 {{/operation}}
 }
@@ -378,7 +379,7 @@ export class {{classname}} extends BaseAPI {
      * @throws {RequiredError}
      * @memberof {{classname}}
      */
-    public {{nickname}}({{#allParams}}{{paramName}}{{^required}}?{{/required}}: {{{dataType}}}, {{/allParams}}options?: any) {
+    public {{nickname}}({{#allParams}}{{paramName}}{{^required}}?{{/required}}: {{{dataType}}}, {{/allParams}}options?: ApiRequestOptions) {
         return {{classname}}Fp(this.configuration).{{nickname}}({{#allParams}}{{paramName}}, {{/allParams}}options)(this.fetch, this.basePath);
     }
 
