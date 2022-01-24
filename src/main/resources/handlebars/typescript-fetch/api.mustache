@@ -246,10 +246,6 @@ export const {{classname}}FetchParamCreator = function (configuration?: Configur
             const needsSerialization = (<any>"{{dataType}}" !== "string") || localVarRequestOptions.headers['Content-Type'] === 'application/json';
             localVarRequestOptions.body =  needsSerialization ? JSON.stringify({{paramName}} || {}) : ({{paramName}} || "");
     {{/bodyParam}}
-            if (localVarRequestOptions.source) {
-                localVarRequestOptions.headers['x-request-source'] = (localVarRequestOptions.source)
-                delete localVarRequestOptions.source
-            }
             return {
                 url: url.format(localVarUrlObj),
                 options: localVarRequestOptions,
